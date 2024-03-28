@@ -197,6 +197,23 @@ span.button:hover {
 	transform: scale(1.07); /* Scale the button to 107% of its original size on hover */
   }
 
+  .claimButton {
+	margin-top: 10px;
+	font-size: 4vh;
+	width: 20vh;
+	height: 10vh;
+	border: 2px solid black;
+	color: white;
+	background-color: #0055de; /* green in hex code */
+	transition: transform 0.3s ease; /* Smooth transition for the transform property */
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";  
+  }
+
+.claimButton:hover {
+	transform: scale(1.07); /* Scale the button to 107% of its original size on hover */
+  }
+
+
 
 
 .header {

@@ -34,18 +34,6 @@ export default function Home({ web3, contract }: HomeProps) {
   const [totalSupply, setTotalSupply] = useState(0); 
   
  
-  useEffect(() => {
-    const fetchTotalSupply = async () => {
-      try {
-        const supply = await contract.methods.totalSupply().call(); // Assuming `totalSupply` is the correct method name
-        setTotalSupply(Number(supply)); // Update state with fetched total supply
-      } catch (error) {
-        console.error("Failed to fetch total supply:", error);
-      }
-    };
-
-    fetchTotalSupply();
-  }, [contract.methods]); // Depend on contract.methods to re-fetch if the contract instance changes
 
 
 	useEffect(() => {
@@ -61,140 +49,15 @@ export default function Home({ web3, contract }: HomeProps) {
 	  }, []);
 	
 
-  useEffect(() => {
-    const fetchWhitelistStatus = async () => {
-      // Simulating fetching whitelist status
-      const status = await fetchUserWhitelistStatus();
-       // Recalculate mint price whenever mint amount or whitelist status changes
-    calculatePrice(mintAmount, isWhitelisted);
-    };
-
-    fetchWhitelistStatus();
-  }, []);
-
-  useEffect(() => {
-    // Recalculate mint price whenever mint amount or whitelist status changes
-    calculatePrice(mintAmount, isWhitelisted);
-  }, [mintAmount, isWhitelisted]);
-
-  // Function to fetch and log the balance
-  useEffect(() => {
-    if (address) {
-      fetchBalance(address);
-    }
-  }, [address]);
-
-  const CountdownTimer = () => {
-    const [timeRemaining, setTimeRemaining] = useState(0);
-  
-    useEffect(() => {
-      const endTime = 1711065624 + 23 * 60 * 60; // 24 hours in the future
-      const interval = setInterval(() => {
-        const currentTime = Math.floor(Date.now() / 1000);
-        const remaining = endTime - currentTime;
-        if (remaining <= 0) {
-          clearInterval(interval);
-          setTimeRemaining(0);
-        } else {
-          setTimeRemaining(remaining);
-        }
-      }, 1000);
-  
-      return () => clearInterval(interval);
-    }, []);
-  
-    // Format the time remaining into hours, minutes, and seconds
-    const hours = Math.floor(timeRemaining / 3600);
-    const minutes = Math.floor((timeRemaining % 3600) / 60);
-    const seconds = Math.floor(timeRemaining % 60);
-  
-    return (
-      <div style={{ textAlign: 'center', marginTop: '0px' }}>
-    <span style={{ color: 'white', padding: '5px', fontSize: '5vh', textShadow: '4px 4px 4px black' }}>
-           {hours} hours {minutes} minutes {seconds} seconds
-        </span>
-      </div>
-    );
-  };
-
   const router = useRouter();
   const refreshPage = () => {
 		router.reload();
 	};
 
-  
-
-	const fetchBalance = async (address: string) => {
-	try {
-	  const balance = await contract.methods.balanceOf(address).call();
-	  setUserBalance(Number(balance)); // Convert BigNumber to Number
-	  console.log("Balance of:", balance);
-	  // If user is whitelisted and balance is 5 or greater, adjust the conditions
-	//   if (balance === 20) {
-	// 	console.log("Balance greater than cap");
-	// 	setShowWhitelistButton(false); // Hide whitelist button
-	// 	setMintPrice(0.012);
-	// 	setMintAmount(Math.min(mintAmount, 20)); // Ensure mintAmount does not exceed new max
-	//   }
-	} catch (error) {
-	  console.error('Error fetching balance:', error);
-	}
-  };
-
-  // Simulated function to fetch user whitelist status
-  const fetchUserWhitelistStatus = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true); // Assuming the user is whitelisted for demonstration purposes
-      }, 1000);
-    });
-  };
 
   const closeAll = () => {
     setIsNetworkSwitchHighlighted(false);
     setIsConnectHighlighted(false);
-  };
-
-  const incrementMintAmount = () => {
-    setMintAmount((prevAmount) => (prevAmount < 20 ? prevAmount + 1 : prevAmount));
-  };
-
-  const decrementMintAmount = () => {
-    setMintAmount((prevAmount) => (prevAmount > 1 ? prevAmount - 1 : prevAmount));
-  };
-
-  const handleMintAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	const maxMint = isWhitelisted ? 20 : 20;
-	let value = Math.max(1, Math.min(maxMint, Number(e.target.value)));
-	setMintAmount(value);
-  };
-  
-
-  const calculatePrice = (amount: number, whitelisted: boolean) => {
-	const basePrice = whitelisted ? 0.006 : 0.012; // Adjusted price for whitelisted users
-	setMintPrice(+(amount * basePrice).toFixed(3));  
-};
-  
-
-  const handleMaxClick = () => {
-    setMintAmount(isWhitelisted ? 20 : 20);
-  };
-
-  const handleMax2Click = () => {
-    setMintAmount(isWhitelisted ? 20 : 20);
-  };
-
-  const toggleGameInfo = () => {
-    setShowGameInfo(!showGameInfo);
-  };
-
-  const toggleMenuVisibility = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const handleClaimRewardsClick = () => {
-    setClaimRewardsClicked(true);
-    setShowMenu(false); // Hide the menu when claiming rewards
   };
 
   
@@ -262,21 +125,29 @@ const handleMintButtonClick = async () => {
 };
 
 
-  const claimRewards = async () => {
-    try {
-      if (!address) {
-        console.error("No account connected");
-        return;
-      }
-
-      const gasEstimate = await contract.methods.claimAllRewards().estimateGas({ from: address });
-      const gasEstimateStr = String(gasEstimate);
-      const response = await contract.methods.claimAllRewards().send({ from: address, gas: gasEstimateStr });
-      console.log("Rewards claimed successfully", response);
-    } catch (error) {
-      console.error("Error claiming rewards:", error);
+const claimRewards = async () => {
+  try {
+    if (!address) {
+      console.error("No account connected");
+      return;
     }
-  };
+
+    // No ETH value is sent for claiming rewards, typically
+    const transactionParameters = {
+      from: address,
+      // Ensure you're calling this on the correct contract address that has the `claimAllRewards` function
+      to: contract.options.address, 
+      data: contract.methods.claimAllRewards().encodeABI(),
+    };
+
+    // Use `sendTransaction` from wagmi's `useSendTransaction` or your method of sending transactions
+    const tx = await sendTransaction(transactionParameters);
+    console.log("Transaction submitted", tx);
+  } catch (error) {
+    console.error("Error claiming rewards:", error);
+  }
+};
+
 
 const redirectToGamePage = () => {
   router.push('https://chao-game.vercel.app/'); // Replace '/game' with your desired path
@@ -349,7 +220,7 @@ return (
                  PETS MOGGING ON BASE!
                 <img src="/basedpets21.png" alt="Bird" style={{ marginTop:"2vh", width: '32vh', height: '32vh' }}/>
                 <br></br>
-                <span style={{marginTop:"20px", fontSize:"1.5vh"}}>0x20e607dA97629A2Bd1C8043C9c2c7Fe0fdf10Cc1</span>
+                <span style={{marginTop:"20px", fontSize:"1.5vh"}}>0xE80b05Fea29dcCD909997872BC4901189B0aB761</span>
 
               </li>
             </ul>
@@ -358,6 +229,12 @@ return (
               onClick={redirectToGamePage}
             >
               PLAY
+            </button>
+            <button 
+              className={styles.claimButton}
+              onClick={claimRewards}
+            >
+              CLAIM!
             </button>
             <br></br>
             
