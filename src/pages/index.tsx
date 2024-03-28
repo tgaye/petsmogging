@@ -349,17 +349,18 @@ return (
                  PETS MOGGING ON BASE!
                 <img src="/basedpets21.png" alt="Bird" style={{ marginTop:"2vh", width: '32vh', height: '32vh' }}/>
                 <br></br>
+                <span style={{marginTop:"20px", fontSize:"1.5vh"}}>0x20e607dA97629A2Bd1C8043C9c2c7Fe0fdf10Cc1</span>
+
               </li>
             </ul>
             <button 
-              style={{width:"20vh", height:"10vh", border:"2px solid black"}}
+              className={styles.playButton}
               onClick={redirectToGamePage}
             >
-              Play Game
+              PLAY
             </button>
             <br></br>
             
-            <span style={{marginTop:"20px"}}>0x20e607dA97629A2Bd1C8043C9c2c7Fe0fdf10Cc1</span>
 {/* 
             <ul className={styles.menuList}>
               <li>

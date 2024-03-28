@@ -183,6 +183,22 @@ span.button:hover {
 	font-family: 'CustomFont'; /* Apply the custom font */
 }
 
+.playButton {
+	font-size: 4vh;
+	width: 20vh;
+	height: 10vh;
+	border: 2px solid black;
+	background-color: #37f437; /* green in hex code */
+	transition: transform 0.3s ease; /* Smooth transition for the transform property */
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";  
+  }
+
+.playButton:hover {
+	transform: scale(1.07); /* Scale the button to 107% of its original size on hover */
+  }
+
+
+
 .header {
     display: flex;
     justify-content: space-between; /* Change alignment to space between */
@@ -222,7 +238,7 @@ span.button:hover {
   .header h1 {
     margin: 0;
     padding: 0;
-    margin-left: 10vw;
+    margin-left: 2vw;
 	font-family: 'CustomFont'; /* Apply the custom font */
 }
 
@@ -306,6 +322,7 @@ span.button:hover {
   .imageHoverEffect:hover {
 	transform: scale(1.2); /* Scale the image to 120% of its original size on hover */
   }
+  
 
   .menuList {
 	list-style: none; /* Remove default list styling */
