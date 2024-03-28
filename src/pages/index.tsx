@@ -126,26 +126,27 @@ const handleMintButtonClick = async () => {
 
 
 const claimRewards = async () => {
-  try {
-    if (!address) {
-      console.error("No account connected");
-      return;
-    }
+  alert("claim not live");
+  // try {
+  //   if (!address) {
+  //     console.error("No account connected");
+  //     return;
+  //   }
 
-    // No ETH value is sent for claiming rewards, typically
-    const transactionParameters = {
-      from: address,
-      // Ensure you're calling this on the correct contract address that has the `claimAllRewards` function
-      to: contract.options.address, 
-      data: contract.methods.claimAllRewards().encodeABI(),
-    };
+  //   // No ETH value is sent for claiming rewards, typically
+  //   const transactionParameters = {
+  //     from: address,
+  //     // Ensure you're calling this on the correct contract address that has the `claimAllRewards` function
+  //     to: contract.options.address, 
+  //     data: contract.methods.claimAllRewards().encodeABI(),
+  //   };
 
-    // Use `sendTransaction` from wagmi's `useSendTransaction` or your method of sending transactions
-    const tx = await sendTransaction(transactionParameters);
-    console.log("Transaction submitted", tx);
-  } catch (error) {
-    console.error("Error claiming rewards:", error);
-  }
+  //   // Use `sendTransaction` from wagmi's `useSendTransaction` or your method of sending transactions
+  //   const tx = await sendTransaction(transactionParameters);
+  //   console.log("Transaction submitted", tx);
+  // } catch (error) {
+  //   console.error("Error claiming rewards:", error);
+  // }
 };
 
 
