@@ -173,6 +173,11 @@ const redirectToGamePage = () => {
 const redirectToTwitterPage = () => {
   router.push('https://twitter.com/ERCtamagotchi'); 
 };
+
+const redirectToDexscreenerPage = () => {
+  router.push('https://dexscreener.com/base/0xE80b05Fea29dcCD909997872BC4901189B0aB761'); 
+};
+  
   
 
 
@@ -268,7 +273,9 @@ return (
 
             <div>
             <br></br>
-              <img src="/dexscreener.png" alt="Dexscreener" className={styles.imageHoverEffect} style={{ width: '9vh', height: '9vh', borderRadius: '2vh', border: '2px solid black' }}/>
+              <img src="/dexscreener.png" alt="Dexscreener" className={styles.imageHoverEffect} style={{ width: '9vh', height: '9vh', borderRadius: '2vh', border: '2px solid black' }}
+                 onClick={redirectToDexscreenerPage}/>
+               
               <img src="/twitter.png" alt="Twitter" className={styles.imageHoverEffect} style={{ width: '9vh', height: '9vh', borderRadius: '2vh', border: '2px solid black', marginLeft: '3vh' }}
                onClick={redirectToTwitterPage}/>
             </div>
