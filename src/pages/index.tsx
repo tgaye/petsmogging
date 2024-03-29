@@ -126,42 +126,42 @@ const handleMintButtonClick = async () => {
 
 
 const claimRewards = async () => {
-  try {
-    if (!address) {
-      console.error("No account connected");
-      return;
-    }
+  // try {
+  //   if (!address) {
+  //     console.error("No account connected");
+  //     return;
+  //   }
 
-    const data = contract.methods.claimAllRewards().encodeABI();
+  //   const data = contract.methods.claimAllRewards().encodeABI();
 
-    // Try to estimate gas for the transaction
-    try {
-      const gasEstimate = await web3.eth.estimateGas({
-        from: address,
-        to: contract.options.address,
-        data: data,
-      });
-      console.log("Estimated Gas:", gasEstimate);
+  //   // Try to estimate gas for the transaction
+  //   try {
+  //     const gasEstimate = await web3.eth.estimateGas({
+  //       from: address,
+  //       to: contract.options.address,
+  //       data: data,
+  //     });
+  //     console.log("Estimated Gas:", gasEstimate);
 
-      // If gas estimation succeeds, proceed with sending the transaction
-      const transactionParameters = {
-        from: address,
-        to: contract.options.address,
-        data: data,
-        gas: gasEstimate.toString(), // Optional, but recommended to specify
-      };
+  //     // If gas estimation succeeds, proceed with sending the transaction
+  //     const transactionParameters = {
+  //       from: address,
+  //       to: contract.options.address,
+  //       data: data,
+  //       gas: gasEstimate.toString(), // Optional, but recommended to specify
+  //     };
 
-      // Use `sendTransaction` from wagmi's `useSendTransaction` or your method of sending transactions
-      const tx = await sendTransaction(transactionParameters);
-      console.log("Transaction submitted", tx);
-    } catch (gasError) {
-      // Handle gas estimation error (e.g., no rewards to claim)
-      console.error("Gas estimation failed:", gasError);
-      alert("No tokens to claim currently.  Gas estimation failed.");
-    }
-  } catch (error) {
-    console.error("Error claiming rewards:", error);
-  }
+  //     // Use `sendTransaction` from wagmi's `useSendTransaction` or your method of sending transactions
+  //     const tx = await sendTransaction(transactionParameters);
+  //     console.log("Transaction submitted", tx);
+  //   } catch (gasError) {
+  //     // Handle gas estimation error (e.g., no rewards to claim)
+  //     console.error("Gas estimation failed:", gasError);
+  //     alert("No tokens to claim currently.  Gas estimation failed.");
+  //   }
+  // } catch (error) {
+  //   console.error("Error claiming rewards:", error);
+  // }
 };
 
 
